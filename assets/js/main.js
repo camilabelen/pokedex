@@ -1,31 +1,54 @@
-$('form').on('submit', function(e) {
-  e.preventDefault();
 
-  var search = $('#search').val().replace(/\s/g, '');
-  search = search.split(',');
-  console.log(search);
+$(document).ready(function () {
 
-  var pokeTypes = search.map(function(names) {
-    return $.ajax({
-      url: 'http://pokeapi.salestock.net/api/v2/type/' + search,
-      datatype: 'json',
-      method: 'GET'
-    });
-  });
-
-  $.when.apply(null, pokeTypes)
-    .then(function() {
-      var pokeTypes = Array.prototype.slice.call(arguments);
-      console.log(pokeTypes);
-    });
 });
 
-/*
-function getDoubleDmgTypes(pokeTypes) {
-  pokeTypes = pokeTypes.map(function(types) {
-    return types[0].damage_relations.double_damage_from;
-  });
-  console.log(pokeTypes);
-}
-*/
+  var input = $('#search');
+  var btn = $('#btn');
 
+  btn.click(function type(names) {
+    var search = input.val();
+    var url = 'http://pokeapi.salestock.net/api/v2/type/' + search;  
+    console.log(url);
+    $.ajax({
+      url: url,
+      method: 'GET',
+      success: getPokemon,
+      error: renderError
+    });
+  });
+
+  function getPokemon(response) {
+    console.log(response);
+    var pokeList = response.pokemon;
+  
+    for(var p in pokeList) {
+      var container = $('#pokemonContainer');
+      var poke = pokeList[p];
+      var pokemon = poke.pokemon.name;
+      var url = poke.pokemon.url;
+      //console.log(pokemon, url);
+      $.ajax({
+        url: url,
+        method: 'GET',
+        success: getImg,
+        error: renderError
+      });
+      
+    }
+  }
+
+  function getImg(r) {
+    console.log(r);
+    var name = r.name;
+    var img = r.sprites.front_default;
+    console.log(name, img);
+  }
+  
+  function renderError (error) {
+    console.log(error);
+  }
+
+  function printPokemon() {
+
+  }
