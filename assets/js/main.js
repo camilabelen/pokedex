@@ -23,7 +23,6 @@ $(document).ready(function () {
     var pokeList = response.pokemon;
   
     for(var p in pokeList) {
-      var container = $('#pokemonContainer');
       var poke = pokeList[p];
       var pokemon = poke.pokemon.name;
       var url = poke.pokemon.url;
@@ -34,21 +33,19 @@ $(document).ready(function () {
         success: getImg,
         error: renderError
       });
-      
     }
   }
 
   function getImg(r) {
     console.log(r);
+    var weight = r.weight;
     var name = r.name;
     var img = r.sprites.front_default;
     console.log(name, img);
+    var container = $('#pokemonContainer');
+    container.append('<div class="col-lg-4 result"><img class="col-lg-3 pokemoncito" src="'+ img +'">' + '<div><h5>'+ name + '</h5></div></div>')
   }
   
   function renderError (error) {
     console.log(error);
-  }
-
-  function printPokemon() {
-
   }
